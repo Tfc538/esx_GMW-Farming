@@ -9,8 +9,18 @@ TriggerEvent("esx:getSharedObject", function(obj) ESX = obj end)
 RegisterServerEvent('gmw_farm:giveItem')
 AddEventHandler('gmw_farm:giveItem', function(item, ItemCount)
     local xPlayer = ESX.GetPlayerFromId(source)
-    xPlayer.addInventoryItem(item, ItemCount)
-    TriggerClientEvent('esx:showNotification', source, "~g~Items wurden erfolgreich gesammlt")
+
+
+    -- If Config.Farm contains item then
+    if Config.Farm[ItemValue] then
+        inventorySpace = xPlayer.getInventoryItem(ItemValue).limit - xPlayer.getInventoryItem(ItemValue).count
+        if inventorySpace >= ItemCount then
+            xPlayer.addInventoryItem(ItemValue, ItemCount)
+            TriggerClientEvent('esx:showNotification', source, "~g~Du hast "..ItemCount.."x "..ItemLabel.." gesammelt")
+        else
+            TriggerClientEvent('esx:showNotification', source, "~r~Du hast nicht genug Platz im Inventar")
+        end
+    end
 end) 
 
 
